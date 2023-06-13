@@ -13,6 +13,9 @@ warnings.filterwarnings("ignore")
 from datetime import datetime
 from tkinter import ttk
 from tkcalendar import Calendar
+from datetime import datetime as second_datetime
+import dateparser
+
 
 
 class DataReader:
@@ -39,7 +42,36 @@ class DataPreProcessor:
         self.data=data
         self.stringency=stringency
         
+        to_be_removed=['Antigua and Barbuda','Aruba','Liechtenstein','North Macedonia',
+                       'Puerto Rico','Réunion','Taiwan']
+
+        self.data=self.data[~self.data.country_region.isin(to_be_removed)]
+
+        country_dict={'The Bahamas':'Bahamas',"Côte d'Ivoire":"Cote d'Ivoire",
+                      'Czechia':'Czech Republic','Guinea-Bissau':'Guinea',
+                   'Kyrgyzstan':'Kyrgyz Republic','Slovakia':'Slovak Republic'}
+
+        self.data['country_region']=self.data['country_region'].replace(country_dict)
         
+    def get_dates(self):
+        
+        first_date=self.data.date.unique().tolist()[0]        
+        last_date=self.data.date.unique().tolist()[-1]        
+
+        return first_date, last_date
+    
+    def format_stringency(self):
+        
+        column_names=[]
+
+        for column in self.stringency.columns[2:]:
+            
+            column_name=datetime.date(dateparser.parse(column).year,dateparser.parse(column).\
+                                      month,dateparser.parse(column).day)
+            column_names.append(column_name)
+            
+        self.stringency.columns=self.stringency.columns[:2].tolist()+column_names
+
         
         
 

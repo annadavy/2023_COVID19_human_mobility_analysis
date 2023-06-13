@@ -12,5 +12,5 @@ def main():
     input_files = utils.DataReader('Global_Mobility_Report.csv','OxCGRT_timeseries_all.xlsx') 
     data,stringency = input_files.read()  
     
-    
+    first_date, last_date=utils.DataPreProcessor(data,stringency).get_dates()
        
