@@ -10,7 +10,7 @@ import tkinter as tk
 from tkinter import messagebox
 import warnings
 warnings.filterwarnings("ignore")
-from datetime import datetime
+from datetime import date
 from tkinter import ttk
 from tkcalendar import Calendar
 from datetime import datetime as second_datetime
@@ -60,18 +60,41 @@ class DataPreProcessor:
 
         return first_date, last_date
     
+    @staticmethod
+    def format_date(date_input):  
+        
+        
+        year=dateparser.parse(date_input).year
+        month=dateparser.parse(date_input).month
+        day=dateparser.parse(date_input).day
+        
+        date_form=date(year,month,day)
+        
+# =============================================================================
+#         week_nb=date_form.strftime("%V")
+#         
+#         if week_nb.startswith('0'):
+#             week_nb=week_nb[1]
+#             
+# =============================================================================
+        return date_form
+    
     def format_stringency(self):
         
         column_names=[]
-
-        for column in self.stringency.columns[2:]:
+        
+        for column in self.stringency.columns:
             
-            column_name=datetime.date(dateparser.parse(column).year,dateparser.parse(column).\
-                                      month,dateparser.parse(column).day)
-            column_names.append(column_name)
-            
-        self.stringency.columns=self.stringency.columns[:2].tolist()+column_names
-
+            try:
+                date_form=self.format_date(column)
+                column_names.append(date_form)
+                
+            except:
+                column_names.append(column)
+                
+        return column_names
+        
+        
         
         
 
