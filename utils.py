@@ -10,7 +10,7 @@ import tkinter as tk
 from tkinter import messagebox
 import warnings
 warnings.filterwarnings("ignore")
-from datetime import date
+from datetime import datetime, date
 from tkinter import ttk
 from tkcalendar import Calendar
 from datetime import datetime as second_datetime
@@ -61,8 +61,7 @@ class DataPreProcessor:
         return first_date, last_date
     
     @staticmethod
-    def format_date(date_input):  
-        
+    def format_date(date_input):          
         
         year=dateparser.parse(date_input).year
         month=dateparser.parse(date_input).month
@@ -151,23 +150,18 @@ def menu(choices=list(''), title='', nr_rows=30):
         master.destroy()
         return a_chosen
     
-class date_sel():
+class DateSelect:
     def __init__(self, root):
         self.top = tk.Toplevel(root)
         now = datetime.now()
         
-        #first_date1=datetime.strptime(first_date, "%Y-%m-%d").date()
         self.cal = Calendar(self.top, font="Arial 12", selectmode='day',
                             year=now.year, month=now.month, day=now.day,locale='en_US')
-        #self.cal = Calendar(self.top, font="Arial 12", selectmode='day',
-                            #year=first_date1.year, month=first_date1.month, day=first_date1.day,locale='en_US')
-                   
                             
         self.cal.pack(fill="both", expand=True)
         ttk.Button(self.top, text="OK", command=self.print_sel).pack()
 
         self.date = datetime.strptime(str(datetime.now().year - 3) + "/12/01", "%Y/%m/%d").date()
-        #self.date=datetime.strptime(last_date, "%Y-%m-%d").date()
         self.top.grab_set()
 
     def print_sel(self):
@@ -175,7 +169,7 @@ class date_sel():
         self.top.destroy()
 
 
-class get_extraction_period():
+class PeriodExtract:
     def __init__(self, from_date, to_date):
         self.root = tk.Tk()
         s = ttk.Style(self.root)
@@ -192,10 +186,9 @@ class get_extraction_period():
         self.root.mainloop()
 
     def tdate(self):
-        cal = date_sel(self.root)
+        cal = DateSelect(self.root)
         self.root.wait_window(cal.top)
         self.frdate = cal.date
-        #from_date = self.frdate
         if self.frdate == datetime.strptime(str(datetime.now().year - 3) + "/12/01",
                                             "%Y/%m/%d").date() or self.todate == datetime.strptime(
                 str(datetime.now().year - 3) + "/12/01", "%Y/%m/%d").date():
@@ -221,7 +214,7 @@ class get_extraction_period():
         label.pack(side='top', fill="x", padx=0, pady=0)
 
     def fdate(self):
-        cal = date_sel(self.root)
+        cal = DateSelect(self.root)
         self.root.wait_window(cal.top)
         self.todate = cal.date
         if self.frdate == datetime.strptime(str(datetime.now().year - 3) + "/12/01",
