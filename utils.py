@@ -128,7 +128,8 @@ def menu(choices=list(''), title='', nr_rows=30):
         frame = tk.Frame(master)
         frame.pack()
     
-        listbox = tk.Listbox(frame, width=int(wdt * 1.5), height=int(min(nr_rows, avl_choices)), font=('times', 10))
+        listbox = tk.Listbox(frame, width=int(wdt * 1.5),
+                             height=int(min(nr_rows, avl_choices)), font=('times', 10))
         listbox.place(x=52, y=90)
         listbox.pack(side="left", fill="y")
     
@@ -156,12 +157,14 @@ class DateSelect:
         now = datetime.now()
         
         self.cal = Calendar(self.top, font="Arial 12", selectmode='day',
-                            year=now.year, month=now.month, day=now.day,locale='en_US')
+                            year=now.year, month=now.month, day=now.day,
+                            locale='en_US')
                             
         self.cal.pack(fill="both", expand=True)
         ttk.Button(self.top, text="OK", command=self.print_sel).pack()
 
-        self.date = datetime.strptime(str(datetime.now().year - 3) + "/12/01", "%Y/%m/%d").date()
+        self.date = datetime.strptime(str(datetime.now().year - 10) + "/12/01",
+                                      "%Y/%m/%d").date()
         self.top.grab_set()
 
     def print_sel(self):
@@ -175,10 +178,13 @@ class PeriodExtract:
         s = ttk.Style(self.root)
         s.theme_use('clam')
 
-        label = ttk.Label(self.root, text="Please select From and To Dates:", font=("Verdana", 10))
+        label = ttk.Label(self.root, text="Please select From and To Dates:",
+                          font=("Verdana", 10))
         label.pack(side="top", fill="x", pady=0)
-        ttk.Button(self.root, text='Select: FROM Date', command=self.fdate).pack(padx=10, pady=10)
-        ttk.Button(self.root, text='Select:  TO  Date', command=self.tdate).pack(padx=10, pady=10)
+        ttk.Button(self.root, text='Select: FROM Date',
+                   command=self.fdate).pack(padx=10, pady=10)
+        ttk.Button(self.root, text='Select:  TO  Date',
+                   command=self.tdate).pack(padx=10, pady=10)
 
         self.frdate = from_date
         self.todate = to_date
@@ -189,19 +195,29 @@ class PeriodExtract:
         cal = DateSelect(self.root)
         self.root.wait_window(cal.top)
         self.frdate = cal.date
-        if self.frdate == datetime.strptime(str(datetime.now().year - 3) + "/12/01",
-                                            "%Y/%m/%d").date() or self.todate == datetime.strptime(
-                str(datetime.now().year - 3) + "/12/01", "%Y/%m/%d").date():
-            if self.frdate == datetime.strptime(str(datetime.now().year - 3) + "/12/01", "%Y/%m/%d").date():
-                if self.todate == datetime.strptime(str(datetime.now().year - 3) + "/12/01", "%Y/%m/%d").date():
-                    label = ttk.Label(self.root, text="'From Date': ____-__-__  --  'To  Date': ____-__-__",
+        
+        if self.frdate == datetime.strptime(str(datetime.now().year - 10) + "/12/01",
+                        "%Y/%m/%d").date() or self.todate == datetime.strptime(
+                       str(datetime.now().year - 3) + "/12/01", "%Y/%m/%d").date():
+                                
+            if self.frdate == datetime.strptime(str(datetime.now().year - 10) 
+                                                + "/12/01", "%Y/%m/%d").date():
+                
+                if self.todate == datetime.strptime(str(datetime.now().year - 10) 
+                                                    + "/12/01", "%Y/%m/%d").date():
+                    
+                    label = ttk.Label(self.root, 
+                                      text="'From Date': ____-__-__  --  'To  Date': ____-__-__",
                                       font=("Verdana", 10), foreground='#ff0000')
                 else:
                     label = ttk.Label(self.root,
-                                      text="'From Date': " + str(self.todate) + " --  'To  Date': ____-__-__",
+                                      text="'From Date': " + str(self.todate)
+                                      +" --  'To  Date': ____-__-__",
                                       font=("Verdana", 10), foreground='#ff0000')
             else:
-                label = ttk.Label(self.root, text="'From Date': ____-__-__ --  'To  Date': " + str(self.frdate),
+                label = ttk.Label(self.root, 
+                                  text="'From Date': ____-__-__ --  'To  Date': "
+                                  + str(self.frdate),
                                   font=("Verdana", 10), foreground='#ff0000')
         else:
             if self.frdate <= self.todate:
@@ -209,7 +225,8 @@ class PeriodExtract:
                 self.frdate = self.todate
                 self.todate = x
             label = ttk.Label(self.root,
-                              text="'From Date': " + str(self.todate) + " --  'To  Date': " + str(self.frdate),
+                              text="'From Date': " + str(self.todate) 
+                              + " --  'To  Date': " + str(self.frdate),
                               font=("Verdana", 10))
         label.pack(side='top', fill="x", padx=0, pady=0)
 
@@ -217,19 +234,28 @@ class PeriodExtract:
         cal = DateSelect(self.root)
         self.root.wait_window(cal.top)
         self.todate = cal.date
-        if self.frdate == datetime.strptime(str(datetime.now().year - 3) + "/12/01",
-                                            "%Y/%m/%d").date() or self.todate == datetime.strptime(
-                str(datetime.now().year - 3) + "/12/01", "%Y/%m/%d").date():
-            if self.frdate == datetime.strptime(str(datetime.now().year - 3) + "/12/01", "%Y/%m/%d").date():
-                if self.todate == datetime.strptime(str(datetime.now().year - 3) + "/12/01", "%Y/%m/%d").date():
-                    label = ttk.Label(self.root, text="'From Date': ____-__-__  --  'To  Date': ____-__-__",
+        if self.frdate == datetime.strptime(str(datetime.now().year - 10) + "/12/01",
+                            "%Y/%m/%d").date() or self.todate == datetime.strptime(
+                        str(datetime.now().year - 3) + "/12/01", "%Y/%m/%d").date():
+                                    
+            if self.frdate == datetime.strptime(str(datetime.now().year - 10)
+                                                + "/12/01", "%Y/%m/%d").date():
+                
+                if self.todate == datetime.strptime(str(datetime.now().year - 10) 
+                                                    + "/12/01", "%Y/%m/%d").date():
+                    
+                    label = ttk.Label(self.root, 
+                                      text="'From Date': ____-__-__  --  'To  Date': ____-__-__",
                                       font=("Verdana", 10), foreground='#ff0000')
                 else:
                     label = ttk.Label(self.root,
-                                      text="'From Date': " + str(self.todate) + " --  'To  Date': ____-__-__",
+                                      text="'From Date': " + str(self.todate) 
+                                      + " --  'To  Date': ____-__-__",
                                       font=("Verdana", 10), foreground='#ff0000')
             else:
-                label = ttk.Label(self.root, text="'From Date': ____-__-__ --  'To  Date': " + str(self.frdate),
+                label = ttk.Label(self.root, 
+                                  text="'From Date': ____-__-__ --  'To  Date': "
+                                  + str(self.frdate),
                                   font=("Verdana", 10), foreground='#ff0000')
         else:
             if self.frdate <= self.todate:
@@ -240,6 +266,21 @@ class PeriodExtract:
                               text="'From Date': " + str(self.todate) + " --  'To  Date': " + str(self.frdate),
                               font=("Verdana", 10))
         label.pack(side='top', fill="x", padx=0, pady=0)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
     
 
