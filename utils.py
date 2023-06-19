@@ -55,10 +55,12 @@ class DataPreProcessor:
         
     def get_dates(self):
         
-        first_date=self.data.date.unique().tolist()[0]        
-        last_date=self.data.date.unique().tolist()[-1]        
+        first_date=second_datetime.strptime(self.data.date.unique().tolist()[0], "%Y-%m-%d").date()       
+        last_date=second_datetime.strptime(self.data.date.unique().tolist()[-1], "%Y-%m-%d").date()
+        base_date=datetime.strptime(str(datetime.now().year - 10) + "/12/01",
+                                      "%Y/%m/%d").date()
 
-        return first_date, last_date
+        return first_date, last_date, base_date
     
     @staticmethod
     def format_date(date_input):          
@@ -78,7 +80,7 @@ class DataPreProcessor:
 # =============================================================================
         return date_form
     
-    def format_stringency(self):
+    def format_stringency(self,from_date,to_date):
         
         column_names=[]
         
@@ -91,8 +93,23 @@ class DataPreProcessor:
             except:
                 column_names.append(column)
                 
-        return column_names
+        self.stringency.columns=column_names
         
+        for column in self.stringency.columns[2:]:
+            if column<from_date or column>to_date:
+                self.stringency.drop(columns=[column],inplace=True) 
+                
+        return self.stringency
+    
+    def format_main_data(self,from_date,to_date):
+        
+        self.data['date_trans']=self.data['date'].apply(lambda x:
+                                                        second_datetime.strptime(x, "%Y-%m-%d").date())
+
+        self.data=self.data[(self.data.date_trans>=from_date)&(self.data.date_trans<=to_date)]
+        self.data.drop(columns=['date_trans'],inplace=True)
+
+        return self.data
         
         
         
@@ -152,7 +169,8 @@ def menu(choices=list(''), title='', nr_rows=30):
         return a_chosen
     
 class DateSelect:
-    def __init__(self, root):
+    def __init__(self,root):        
+   
         self.top = tk.Toplevel(root)
         now = datetime.now()
         
@@ -263,7 +281,8 @@ class PeriodExtract:
                 self.frdate = self.todate
                 self.todate = x
             label = ttk.Label(self.root,
-                              text="'From Date': " + str(self.todate) + " --  'To  Date': " + str(self.frdate),
+                              text="'From Date': " + str(self.todate) 
+                              + " --  'To  Date': " + str(self.frdate),
                               font=("Verdana", 10))
         label.pack(side='top', fill="x", padx=0, pady=0)
         
