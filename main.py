@@ -14,10 +14,8 @@ def main():
     
     processor=utils.DataPreProcessor(data,stringency)
     
-    first_date, last_date, base_date = processor.get_dates()
-    
-    stringency=processor.format_stringency(first_date, last_date)  
-    
+    first_date, last_date, base_date = processor.get_dates()   
+       
                 
     user_choice=utils.menu(choices=['1. All available dates from '+str(first_date)+" to "+str(last_date),
                           '2. Choose dates from calendar'],
@@ -42,5 +40,10 @@ def main():
         if stringency.shape[1]<3:
             
             print ('Stringency data not available for the selected period.')
+            
+    else:
+            
+        data = processor.format_main_data(first_date, last_date)
+        stringency=processor.format_stringency(first_date, last_date)  
 
         

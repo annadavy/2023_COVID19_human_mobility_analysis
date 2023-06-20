@@ -63,22 +63,12 @@ class DataPreProcessor:
         return first_date, last_date, base_date
     
     @staticmethod
-    def format_date(date_input):          
-        
-        year=dateparser.parse(date_input).year
-        month=dateparser.parse(date_input).month
-        day=dateparser.parse(date_input).day
-        
-        date_form=date(year,month,day)
-        
-# =============================================================================
-#         week_nb=date_form.strftime("%V")
-#         
-#         if week_nb.startswith('0'):
-#             week_nb=week_nb[1]
-#             
-# =============================================================================
+    def format_date(date_input):       
+                        
+        date_form=second_datetime.strptime(date_input, "%Y-%m-%d").date()
+       
         return date_form
+        
     
     def format_stringency(self,from_date,to_date):
         
@@ -96,23 +86,26 @@ class DataPreProcessor:
         self.stringency.columns=column_names
         
         for column in self.stringency.columns[2:]:
-            if column<from_date or column>to_date:
+            if column<from_date or column>to_date: 
                 self.stringency.drop(columns=[column],inplace=True) 
                 
         return self.stringency
     
     def format_main_data(self,from_date,to_date):
         
-        self.data['date_trans']=self.data['date'].apply(lambda x:
-                                                        second_datetime.strptime(x, "%Y-%m-%d").date())
+        self.data['date_trans'] = self.data['date'].apply(lambda x:
+                                                        self.format_date(x))
 
-        self.data=self.data[(self.data.date_trans>=from_date)&(self.data.date_trans<=to_date)]
+        self.data = self.data[(self.data.date_trans>=from_date)&(self.data.date_trans<=to_date)]
+        
+        self.data['week'] = self.data['date_trans'].apply(lambda x:x.isocalendar().week)
+        self.data['weekday'] = self.data['date_trans'].apply(lambda x:x.isocalendar().weekday)
+        self.data['year'] = self.data['date_trans'].apply(lambda x:x.isocalendar().year)
+
         self.data.drop(columns=['date_trans'],inplace=True)
 
         return self.data
-        
-        
-        
+    
 
 def menu(choices=list(''), title='', nr_rows=30):
         """A function to create a user menu from a list as input
