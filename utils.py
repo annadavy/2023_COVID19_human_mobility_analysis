@@ -63,9 +63,15 @@ class DataPreProcessor:
         return first_date, last_date, base_date
     
     @staticmethod
-    def format_date(date_input):       
+    def format_date(date_input):
+        
+        try:
                         
-        date_form=second_datetime.strptime(date_input, "%Y-%m-%d").date()
+            date_form=second_datetime.strptime(date_input, "%Y-%m-%d").date()
+        
+        except:
+            
+            date_form=second_datetime.strptime(date_input, "%d%b%Y").date() 
        
         return date_form
         
@@ -101,6 +107,7 @@ class DataPreProcessor:
         self.data['week'] = self.data['date_trans'].apply(lambda x:x.isocalendar().week)
         self.data['weekday'] = self.data['date_trans'].apply(lambda x:x.isocalendar().weekday)
         self.data['year'] = self.data['date_trans'].apply(lambda x:x.isocalendar().year)
+        self.data['week_year']=list(zip(self.data['week'],self.data['year']))
 
         self.data.drop(columns=['date_trans'],inplace=True)
 
