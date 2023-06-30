@@ -5,6 +5,7 @@ Created on Fri Dec  4 10:46:25 2020
 @author: Anna Davy
 """
 import pandas as pd
+import numpy as np
 import sys
 import tkinter as tk
 from tkinter import messagebox
@@ -110,6 +111,25 @@ class DataPreProcessor:
         self.data['week_year']=list(zip(self.data['week'],self.data['year']))
 
         self.data.drop(columns=['date_trans'],inplace=True)
+        
+        list_weeks=self.data['week_year'].unique().tolist()
+        list1=list_weeks[::2]
+        list2=list_weeks[1::2]
+        list_weeks1=list(zip(list1,list2))
+        
+        dict_weeks1={str(x[0]):str(x) for x in list_weeks1}
+        dict_weeks2={str(x[1]):str(x) for x in list_weeks1}
+
+        dict_weeks=dict_weeks1|dict_weeks2
+        
+        self.data['week_year']=self.data['week_year'].apply(lambda x: str(x))
+
+        self.data['2weeks']=self.data['week_year'].replace(dict_weeks)
+        
+        self.data=self.data[self.data.weekday!=6]
+        self.data.drop(columns='weekday',inplace=True)
+
+
 
         return self.data
     
