@@ -46,4 +46,4 @@ def main():
         data = processor.format_main_data(first_date, last_date)
         stringency=processor.format_stringency(first_date, last_date)  
 
-        
+    data_gr=processor.group_data()

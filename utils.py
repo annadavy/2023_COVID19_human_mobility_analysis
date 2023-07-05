@@ -128,10 +128,30 @@ class DataPreProcessor:
         
         self.data=self.data[self.data.weekday!=6]
         self.data.drop(columns='weekday',inplace=True)
-
-
-
+        
         return self.data
+        
+    def group_data(self):
+        
+        data_gr=self.data[['country_region',
+               'retail_and_recreation_percent_change_from_baseline',
+               'grocery_and_pharmacy_percent_change_from_baseline',
+               'parks_percent_change_from_baseline',
+               'transit_stations_percent_change_from_baseline',
+               'workplaces_percent_change_from_baseline',
+               'residential_percent_change_from_baseline', '2weeks']]\
+            .groupby(['country_region','2weeks']).mean().reset_index()
+
+        data_gr.columns=['country', '2weeks',
+               'retail_and_recreation_percent_change_from_baseline',
+               'grocery_and_pharmacy_percent_change_from_baseline',
+               'parks_percent_change_from_baseline',
+               'transit_stations_percent_change_from_baseline',
+               'workplaces_percent_change_from_baseline',
+               'residential_percent_change_from_baseline']
+        
+        return data_gr
+        
     
 
 def menu(choices=list(''), title='', nr_rows=30):
