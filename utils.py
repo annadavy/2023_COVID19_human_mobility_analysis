@@ -77,7 +77,7 @@ class DataPreProcessor:
         return date_form
         
     
-    def format_stringency(self,from_date,to_date):
+    def format_stringency(self,from_date,to_date,date_dict):
         
         column_names=[]
         
@@ -85,17 +85,22 @@ class DataPreProcessor:
             
             try:
                 date_form=self.format_date(column)
-                column_names.append(date_form)
-                
+                if date_form<from_date or date_form>to_date: 
+                    self.stringency.drop(columns=[column],inplace=True)                    
+                else:
+                    column_names.append(date_dict[date_form])
+
             except:
+                if ('code').lower() in column:
+                    column='Code'
+                if ('name').lower() in column:
+                    column='Country'
                 column_names.append(column)
                 
         self.stringency.columns=column_names
-        
-        for column in self.stringency.columns[2:]:
-            if column<from_date or column>to_date: 
-                self.stringency.drop(columns=[column],inplace=True) 
-                
+        self.stringency.drop('Code',1,inplace=True)          
+
+    
         return self.stringency
     
     def format_main_data(self,from_date,to_date):
@@ -109,6 +114,8 @@ class DataPreProcessor:
         self.data['weekday'] = self.data['date_trans'].apply(lambda x:x.isocalendar().weekday)
         self.data['year'] = self.data['date_trans'].apply(lambda x:x.isocalendar().year)
         self.data['week_year']=list(zip(self.data['week'],self.data['year']))
+        
+        self.date_dict=dict(zip(self.data['date_trans'],self.data['week_year']))
 
         self.data.drop(columns=['date_trans'],inplace=True)
         
@@ -129,7 +136,7 @@ class DataPreProcessor:
         self.data=self.data[self.data.weekday!=6]
         self.data.drop(columns='weekday',inplace=True)
         
-        return self.data
+        return self.data, self.date_dict
         
     def group_data(self):
         
