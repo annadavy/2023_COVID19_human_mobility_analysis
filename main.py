@@ -43,7 +43,7 @@ def main():
             
     else:
             
-        data, date_dict = processor.format_main_data(first_date, last_date)
-        stringency=processor.format_stringency(first_date, last_date,date_dict)  
+        data, date_dict, dict_weeks = processor.format_main_data(first_date, last_date)
+        stringency=processor.format_stringency(first_date, last_date, date_dict, dict_weeks)  
 
     data_gr=processor.group_data()

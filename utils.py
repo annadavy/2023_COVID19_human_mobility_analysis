@@ -77,7 +77,7 @@ class DataPreProcessor:
         return date_form
         
     
-    def format_stringency(self,from_date,to_date,date_dict):
+    def format_stringency(self,from_date,to_date,date_dict,dict_weeks):
         
         column_names=[]
         
@@ -98,8 +98,16 @@ class DataPreProcessor:
                 column_names.append(column)
                 
         self.stringency.columns=column_names
-        self.stringency.drop('Code',1,inplace=True)          
+        self.stringency.drop('Code',1,inplace=True)
 
+        self.stringency=self.stringency.T
+
+        self.stringency.columns=self.stringency.iloc[0].tolist()
+        self.stringency=self.stringency[1:]
+        self.stringency=self.stringency.reset_index()
+        self.stringency=self.stringency.rename(columns = {'index':'week_year'})
+        self.stringency['week_year']=self.stringency['week_year'].astype(str)
+        self.stringency['2weeks']=self.stringency['week_year'].replace(self.dict_weeks)
     
         return self.stringency
     
@@ -127,16 +135,16 @@ class DataPreProcessor:
         dict_weeks1={str(x[0]):str(x) for x in list_weeks1}
         dict_weeks2={str(x[1]):str(x) for x in list_weeks1}
 
-        dict_weeks=dict_weeks1|dict_weeks2
+        self.dict_weeks=dict_weeks1|dict_weeks2
         
         self.data['week_year']=self.data['week_year'].apply(lambda x: str(x))
 
-        self.data['2weeks']=self.data['week_year'].replace(dict_weeks)
+        self.data['2weeks']=self.data['week_year'].replace(self.dict_weeks)
         
         self.data=self.data[self.data.weekday!=6]
         self.data.drop(columns='weekday',inplace=True)
         
-        return self.data, self.date_dict
+        return self.data, self.date_dict, self.dict_weeks
         
     def group_data(self):
         
