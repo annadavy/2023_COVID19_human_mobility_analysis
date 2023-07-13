@@ -108,6 +108,7 @@ class DataPreProcessor:
         self.stringency=self.stringency.rename(columns = {'index':'week_year'})
         self.stringency['week_year']=self.stringency['week_year'].astype(str)
         self.stringency['2weeks']=self.stringency['week_year'].replace(self.dict_weeks)
+        self.stringency=self.stringency.fillna(0)
     
         return self.stringency
     
@@ -148,7 +149,7 @@ class DataPreProcessor:
         
     def group_data(self):
         
-        data_gr=self.data[['country_region',
+        self.data_gr=self.data[['country_region',
                'retail_and_recreation_percent_change_from_baseline',
                'grocery_and_pharmacy_percent_change_from_baseline',
                'parks_percent_change_from_baseline',
@@ -157,7 +158,7 @@ class DataPreProcessor:
                'residential_percent_change_from_baseline', '2weeks']]\
             .groupby(['country_region','2weeks']).mean().reset_index()
 
-        data_gr.columns=['country', '2weeks',
+        self.data_gr.columns=['country', '2weeks',
                'retail_and_recreation_percent_change_from_baseline',
                'grocery_and_pharmacy_percent_change_from_baseline',
                'parks_percent_change_from_baseline',
@@ -165,7 +166,9 @@ class DataPreProcessor:
                'workplaces_percent_change_from_baseline',
                'residential_percent_change_from_baseline']
         
-        return data_gr
+        self.stringency_gr=self.stringency.groupby(['2weeks']).mean()
+        
+        return self.data_gr, self.stringency_gr
         
     
 
