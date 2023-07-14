@@ -167,8 +167,18 @@ class DataPreProcessor:
                'residential_percent_change_from_baseline']
         
         self.stringency_gr=self.stringency.groupby(['2weeks']).mean()
+        self.stringency_gr=self.stringency_gr.round()
         
-        return self.data_gr, self.stringency_gr
+        self.df_max1=self.stringency_gr.max().reset_index()
+        self.df_max1=self.df_max1.set_index('index') 
+        self.df_max2=self.stringency_gr.idxmax().reset_index()
+        self.df_max2=self.df_max2.set_index('index')
+        self.df_max=self.df_max2.merge(self.df_max1, on='index')
+        self.df_max.columns=['2weeks','stringency_value']
+
+
+        
+        return self.data_gr, self.df_max
         
     
 
