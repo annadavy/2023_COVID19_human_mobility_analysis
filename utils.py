@@ -175,10 +175,20 @@ class DataPreProcessor:
         self.df_max2=self.df_max2.set_index('index')
         self.df_max=self.df_max2.merge(self.df_max1, on='index')
         self.df_max.columns=['2weeks','stringency_value']
-
+        self.df_max['country']=self.stringency_gr.columns
 
         
-        return self.data_gr, self.df_max
+        self.data_final=pd.merge(self.data_gr,self.df_max,on=['country','2weeks'])
+        self.data_final=self.data_final[['country', '2weeks', 'stringency_value','retail_and_recreation_percent_change_from_baseline',
+               'grocery_and_pharmacy_percent_change_from_baseline',
+               'parks_percent_change_from_baseline',
+               'transit_stations_percent_change_from_baseline',
+               'workplaces_percent_change_from_baseline',
+               'residential_percent_change_from_baseline']]
+
+        self.data_final=self.data_final.fillna(0)
+        
+        return self.data_final
         
     
 
