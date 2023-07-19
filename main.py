@@ -55,6 +55,10 @@ def main():
 
 
     data_final['group']=labels
+    
+    writer=utils.DataWriter(data_final)
+    
+    writer.write_to_excel()
 
     
     

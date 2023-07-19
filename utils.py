@@ -189,8 +189,28 @@ class DataPreProcessor:
         self.data_final=self.data_final.fillna(0)
         
         return self.data_final
-        
     
+    
+class DataWriter:
+    
+    def __init__(self,*files):
+        
+        self.files=(files)
+        
+    def write_to_excel(self):
+        
+        for file in self.files:           
+    
+            self.xlsx_wrt = pd.ExcelWriter("mobility_"+second_datetime.now()\
+                                           .strftime("%Y_%m_%d_%H_%M")+".xlsx", engine="xlsxwriter")
+        
+            self.workbook  = self.xlsx_wrt.book
+
+            file.to_excel(self.xlsx_wrt, sheet_name="Country_groups", index=False)
+
+            self.xlsx_wrt.save()
+            self.workbook.close()
+
 
 def menu(choices=list(''), title='', nr_rows=30):
         """A function to create a user menu from a list as input
