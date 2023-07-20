@@ -60,5 +60,6 @@ def main():
     
     writer.write_to_excel()
 
-    
+if __name__ == "__main__":
+    main()    
     
