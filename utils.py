@@ -20,6 +20,16 @@ import dateparser
 
 
 class DataReader:
+    """
+    A class to read data from different file formats.
+
+    This class is designed to handle the reading of data from multiple files,
+    supporting formats like CSV and Excel (xlsx). It takes multiple file paths
+    as input and provides methods to read these files into Pandas dataframes.
+
+    Attributes:
+        files (tuple): A tuple containing file paths provided during class instantiation.
+    """
     
     def __init__(self,*files):
         
