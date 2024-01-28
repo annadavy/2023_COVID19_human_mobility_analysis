@@ -47,6 +47,34 @@ class DataReader:
         return data,stringency     
     
 class DataPreProcessor:
+    """
+    A class for preprocessing global mobility and stringency data for further analysis.
+
+    Attributes:
+        data (DataFrame): The initial data set containing global mobility information.
+        stringency (DataFrame): The initial data set containing stringency measures.
+
+    The preprocessing includes:
+    - Removing specific countries/regions from the data set.
+    - Renaming certain countries to maintain consistency.
+
+    Methods:
+    - get_dates(): Extracts the first and last dates from the mobility data and calculates a base date.
+
+    Usage:
+    The class is initialized with two data frames: `data` and `stringency`. It automatically performs the necessary preprocessing steps on instantiation. 
+    The `get_dates` method can be used to retrieve key date information relevant for subsequent analysis.
+
+    Example:
+    ```
+    processor = DataPreProcessor(mobility_data, stringency_data)
+    first_date, last_date, base_date = processor.get_dates()
+    ```
+
+    Note:
+    - The list of countries to be removed and the country renaming dictionary are hardcoded within the class.
+    - This class is designed to work with specific data structures and may require modification for different data sets.
+    """
     
     def __init__(self, data, stringency):
         
