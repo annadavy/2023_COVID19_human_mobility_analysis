@@ -10,6 +10,25 @@ from sklearn.cluster import KMeans
 
 
 def main():
+    """
+    The main function of a data processing and analysis pipeline focused on global mobility and stringency data.
+
+    Steps:
+    1. Reads input data from 'Global_Mobility_Report.csv' and 'OxCGRT_timeseries_all.xlsx' using a custom DataReader class.
+    2. Preprocesses the data using the DataPreProcessor class, extracting date-related information.
+    3. Presents the user with a menu to choose between analyzing data for all available dates or a specific date range.
+    4. If a specific date range is chosen, further processes the data to conform to the selected dates and checks the availability of stringency data.
+    5. Formats and groups the main data and stringency data based on the user's selection.
+    6. Applies a KMeans clustering algorithm to the processed data, assigning cluster labels.
+    7. Appends the cluster labels to the final data and writes the output to an Excel file using the DataWriter class.
+
+    Note:
+    - The function is designed to be executed as the primary entry point of a script, with the main logic conditional on `__name__ == "__main__"`.
+    - Utilizes custom utility classes (DataReader, DataPreProcessor, DataWriter) for various data handling tasks.
+    - Employs a KMeans clustering model from the sklearn library to analyze the processed data.
+    - Handles user input for date selection and manages data processing accordingly.
+    - Ensures compatibility of selected dates with the available data range.
+    """
     
     input_files = utils.DataReader('Global_Mobility_Report.csv','OxCGRT_timeseries_all.xlsx') 
     data,stringency = input_files.read()  
